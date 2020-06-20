@@ -37,6 +37,10 @@ defmodule RealWorldWeb.Schema do
       arg(:cursor, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
     end
+    field :article, :article do
+      arg :slug, non_null(:string)
+      resolve &RealWorldWeb.Resolver.Content.resolve_article/3
+    end
   end
   
   scalar :date_time do

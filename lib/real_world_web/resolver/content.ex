@@ -6,4 +6,8 @@ defmodule RealWorldWeb.Resolver.Content do
   def resolve_articles(_, _, _) do
     {:ok, RealWorld.Content.paginate_articles()}
   end
+
+  def resolve_article(_, %{slug: slug}, _) do
+    {:ok, RealWorld.Content.get_article_by_slug(slug)}
+  end
 end

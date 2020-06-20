@@ -77,6 +77,12 @@ defmodule RealWorld.Content do
   """
   def get_article!(id), do: Repo.get!(Article, id)
 
+  def get_article_by_slug(slug) do
+    q = from a in Article, where: a.slug == ^slug
+    
+    Repo.one(q)
+  end
+
   @doc """
   Creates a article.
 
