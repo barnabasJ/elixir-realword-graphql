@@ -10,6 +10,5 @@ defmodule RealWorld.Repo.Migrations.CreateArticles do
 
       timestamps()
     end
-
   end
 end

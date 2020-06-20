@@ -6,8 +6,18 @@ defmodule RealWorld.ContentTest do
   describe "articles" do
     alias RealWorld.Content.Article
 
-    @valid_attrs %{body: "some body", description: "some description", slug: "some slug", title: "some title"}
-    @update_attrs %{body: "some updated body", description: "some updated description", slug: "some updated slug", title: "some updated title"}
+    @valid_attrs %{
+      body: "some body",
+      description: "some description",
+      slug: "some slug",
+      title: "some title"
+    }
+    @update_attrs %{
+      body: "some updated body",
+      description: "some updated description",
+      slug: "some updated slug",
+      title: "some updated title"
+    }
     @invalid_attrs %{body: nil, description: nil, slug: nil, title: nil}
 
     def article_fixture(attrs \\ %{}) do
