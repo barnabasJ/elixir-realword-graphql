@@ -10,7 +10,7 @@ defmodule RealWorldWeb.Schema do
 
   query do
     field :articles, list_of(:article) do
-      resolve fn _, _, _ -> {:ok, []} end
+      resolve &RealWorldWeb.Resolver.Content.resolve_articles/3
     end
   end
 end
