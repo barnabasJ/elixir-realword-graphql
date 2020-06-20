@@ -7,6 +7,7 @@ defmodule RealWorld.Content do
   alias RealWorld.Repo
 
   alias RealWorld.Content.Article
+  alias RealWorld.Content.Tag
 
   def paginate_articles(cursor \\ nil, limit \\ 50)
   def paginate_articles(nil, limit), do: _paginate_articles(0, limit)
@@ -15,22 +16,27 @@ defmodule RealWorld.Content do
   defp _paginate_articles(offset, limit) do
     count_query = from a in Article, select: count(a.id)
 
+    tags_query = from t in Tag, select: t.name
+
     article_query =
-      from a in Article, order_by: {:desc, :updated_at}, limit: (^limit + 1), offset: ^offset
+      Article
+      |> preload([tags: ^tags_query])
+      |> order_by({:desc, :updated_at})
+      |> limit(^limit + 1)
+      |> offset(^offset)
 
     articles = Repo.all(article_query)
     count = Repo.one(count_query)
 
-    article_edges = 
-    articles
-    |> Enum.zip(offset..(offset + limit))
-    |> Enum.map(fn {article, n} -> %{node: article, cursor: encode_term n } end)
+    article_edges =
+      articles
+      |> Enum.zip(offset..(offset + limit))
+      |> Enum.map(fn {article, n} -> %{node: article, cursor: encode_term(n)} end)
 
-    page_info = 
-      %{
-        end_cursor: encode_term(offset + limit),
-        has_next_page: (offset + limit) < count 
-      }
+    page_info = %{
+      end_cursor: encode_term(offset + limit),
+      has_next_page: offset + limit < count
+    }
 
     %{
       edges: article_edges,
@@ -39,8 +45,8 @@ defmodule RealWorld.Content do
     }
   end
 
-  defp encode_term(term), do: term |> :erlang.term_to_binary |> Base.encode64
-  defp decode_term(binary), do: binary |> Base.decode64! |> :erlang.binary_to_term 
+  defp encode_term(term), do: term |> :erlang.term_to_binary() |> Base.encode64()
+  defp decode_term(binary), do: binary |> Base.decode64!() |> :erlang.binary_to_term()
 
   @doc """
   Returns the list of articles.

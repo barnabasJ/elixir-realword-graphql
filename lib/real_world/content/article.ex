@@ -7,6 +7,7 @@ defmodule RealWorld.Content.Article do
     field :description, :string
     field :slug, :string
     field :title, :string
+    many_to_many :tags, RealWorld.Content.Tag, join_through: "article_tags"
 
     timestamps()
   end

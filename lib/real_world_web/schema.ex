@@ -2,10 +2,12 @@ defmodule RealWorldWeb.Schema do
   use Absinthe.Schema
 
   object :article do
+    field :id, :id
     field :slug, :string
     field :title, :string
     field :description, :string
     field :body, :string
+    field :tags, list_of(:string)
   end
 
   object :article_edge do
@@ -26,7 +28,7 @@ defmodule RealWorldWeb.Schema do
 
   query do
     field :articles, :article_connection do
-      arg :cursor, :string
+      arg(:cursor, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
     end
   end

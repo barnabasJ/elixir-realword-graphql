@@ -1,5 +1,5 @@
 defmodule RealWorldWeb.Resolver.Content do
-  def resolve_articles(_, %{ cursor: cursor }, _) do
+  def resolve_articles(_, %{cursor: cursor}, _) do
     {:ok, RealWorld.Content.paginate_articles(cursor)}
   end
 
