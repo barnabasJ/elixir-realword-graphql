@@ -10,8 +10,7 @@ use Mix.Config
 config :real_world,
   ecto_repos: [RealWorld.Repo]
 
-config :real_world, RealWorld.Repo,
-  migration_timestamps: [type: :timestamptz]
+config :real_world, RealWorld.Repo, migration_timestamps: [type: :timestamptz]
 # Configures the endpoint
 config :real_world, RealWorldWeb.Endpoint,
   url: [host: "localhost"],

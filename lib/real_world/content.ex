@@ -20,7 +20,7 @@ defmodule RealWorld.Content do
 
     article_query =
       Article
-      |> preload([tags: ^tags_query])
+      |> preload(tags: ^tags_query)
       |> order_by({:desc, :updated_at})
       |> limit(^limit + 1)
       |> offset(^offset)
@@ -79,7 +79,7 @@ defmodule RealWorld.Content do
 
   def get_article_by_slug(slug) do
     q = from a in Article, where: a.slug == ^slug
-    
+
     Repo.one(q)
   end
 
