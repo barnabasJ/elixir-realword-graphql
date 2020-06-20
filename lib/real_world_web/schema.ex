@@ -8,7 +8,11 @@ defmodule RealWorldWeb.Schema do
     field :description, :string
     field :body, :string
     field :tags, list_of(:string)
-    field :inserted_at, :date_time
+    field :created_at, :date_time do
+      resolve fn parent, _, _ -> 
+        {:ok, Map.get(parent, :inserted_at)}
+      end
+    end
     field :updated_at, :date_time
   end
 
