@@ -1,5 +1,5 @@
 defmodule RealWorld.Content.Tag do
-  use Ecto.Schema
+  use RealWorld.Schema
   import Ecto.Changeset
 
   schema "tags" do

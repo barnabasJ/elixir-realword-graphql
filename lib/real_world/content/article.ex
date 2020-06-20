@@ -1,5 +1,5 @@
 defmodule RealWorld.Content.Article do
-  use Ecto.Schema
+  use RealWorld.Schema
   import Ecto.Changeset
 
   schema "articles" do

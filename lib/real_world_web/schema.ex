@@ -8,6 +8,8 @@ defmodule RealWorldWeb.Schema do
     field :description, :string
     field :body, :string
     field :tags, list_of(:string)
+    field :inserted_at, :date_time
+    field :updated_at, :date_time
   end
 
   object :article_edge do
@@ -30,6 +32,19 @@ defmodule RealWorldWeb.Schema do
     field :articles, :article_connection do
       arg(:cursor, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
+    end
+  end
+  
+  scalar :date_time do
+    parse fn input -> 
+      case DateTime.from_iso8601(input.value) do
+        {:ok, date_time} -> {:ok, date_time}
+        _ -> :error
+      end
+    end
+
+    serialize fn date_time ->
+      DateTime.to_iso8601(date_time)
     end
   end
 end
