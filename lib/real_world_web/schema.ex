@@ -1,18 +1,12 @@
 defmodule RealWorldWeb.Schema do
   use Absinthe.Schema
 
-  import_types __MODULE__.Content
+  import_types(__MODULE__.Content)
+  import_types(__MODULE__.Accounts)
 
   object :page_info do
     field :end_cursor, :string
     field :has_next_page, :boolean
-  end
-
-  object :profile do
-    field :username, :string
-    field :bio, :string
-    field :image, :string
-    field :viewerIsFollowing, :boolean
   end
 
   query do
