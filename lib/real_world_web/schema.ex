@@ -11,14 +11,14 @@ defmodule RealWorldWeb.Schema do
 
   object :me do
     field :profile, :profile do
-      resolve &RealWorldWeb.Resolver.Accounts.resolve_profile/3
+      resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
     end
   end
 
   query do
     field :me, :me do
-      middleware RealWorldWeb.Middleware.Authorize
-      resolve fn _, _, _ -> {:ok, %{}} end
+      middleware(RealWorldWeb.Middleware.Authorize)
+      resolve(fn _, _, _ -> {:ok, %{}} end)
     end
 
     field :articles, :article_connection do
@@ -42,7 +42,7 @@ defmodule RealWorldWeb.Schema do
   end
 
   mutation do
-    import_fields :account_mutations
+    import_fields(:account_mutations)
   end
 
   scalar :date_time do

@@ -6,6 +6,6 @@ defmodule RealWorldWeb.Authentication do
   end
 
   def verify(token) do
-    Phoenix.Token.verify(RealWorldWeb.Endpoint, @user_salt, token, [max_age: 365 * 24 * 3600])
+    Phoenix.Token.verify(RealWorldWeb.Endpoint, @user_salt, token, max_age: 365 * 24 * 3600)
   end
 end

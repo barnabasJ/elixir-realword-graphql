@@ -21,14 +21,14 @@ defmodule RealWorldWeb.Schema.Accounts do
 
   object :account_mutations do
     field :login, :session do
-      arg :email, non_null(:string)
-      arg :password, non_null(:string)
-      resolve &RealWorldWeb.Resolver.Accounts.login/3
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      resolve(&RealWorldWeb.Resolver.Accounts.login/3)
     end
 
     field :register, :profile do
-      arg :register_input, non_null(:register_input)
-      resolve &RealWorldWeb.Resolver.Accounts.register/3
+      arg(:register_input, non_null(:register_input))
+      resolve(&RealWorldWeb.Resolver.Accounts.register/3)
     end
   end
 end

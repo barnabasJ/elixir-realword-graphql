@@ -6,7 +6,7 @@ defmodule RealWorldWeb.Context do
 
   def call(conn, _) do
     context = build_context(conn)
-    IO.inspect [context: context]
+    IO.inspect(context: context)
     Absinthe.Plug.put_options(conn, context: context)
   end
 
@@ -15,7 +15,7 @@ defmodule RealWorldWeb.Context do
          {:ok, data} <- RealWorldWeb.Authentication.verify(token),
          %{} = user <- get_user(data) do
       %{current_user: user}
-    else 
+    else
       _ -> %{}
     end
   end

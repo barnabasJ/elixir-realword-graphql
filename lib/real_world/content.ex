@@ -9,9 +9,7 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
-
   def list_tags(), do: Repo.all(from t in Tag, select: t.name)
-
 
   def paginate_articles(cursor \\ nil, limit \\ 50)
   def paginate_articles(nil, limit), do: _paginate_articles(0, limit)
