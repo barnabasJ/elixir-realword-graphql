@@ -1,0 +1,12 @@
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('b1508c29-8b85-4494-878a-b2113280828f', 'barnabas', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('6640ed98-f061-4b30-a462-a73ba05a8321', 'anne', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('90fb180d-24fb-4ba4-a507-2dd54e3a614c', 'stefan', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('0b39cc8b-a135-4c7f-be3b-f68f7b9b2121', 'bernd', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('5184fc1e-d7a9-4d8d-8f95-6ad7ac7f8932', 'bernhard', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('6a34cb07-6539-4f95-867b-34dd9449975d', 'michael', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('19571461-aaf4-4ced-b083-b169032f2188', 'christian', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('10bb3d8f-5047-42ef-86be-7bba6105b42e', 'lukas', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('90badd9c-5404-4686-b6a8-31132e5a9758', 'harald', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('fc588b6d-a5a1-461d-a215-a6591123f1fc', 'nathalie', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('fffb60c7-8ab8-4b4f-ba0f-5a70b81a6c22', 'manfred', null, null, '2020-06-21 07:42:06.000000', '2020-06-21 07:42:06.000000');
+INSERT INTO public.users (id, username, bio, image, inserted_at, updated_at) VALUES ('aab3aa38-32a2-407a-ba6e-833770de1c3b', 'example', null, null, '2020-06-21 09:04:49.000000', '2020-06-21 09:04:49.000000');
