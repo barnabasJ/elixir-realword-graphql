@@ -3,14 +3,14 @@ defmodule RealWorldWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug RealWorldWeb.Context
   end
 
   scope "/api" do
     pipe_through :api
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: RealWorldWeb.Schema,
-      interface: :simple
+      schema: RealWorldWeb.Schema
 
     forward "/", Absinthe.Plug, schema: RealWorldWeb.Schema
   end
