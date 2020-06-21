@@ -10,8 +10,9 @@ defmodule RealWorldWeb.Schema.Content do
     field :tags, list_of(:string)
     field :updated_at, :date_time
     field :viewer_has_favorited, :integer
+
     field :favorites_count, :integer do
-      resolve &RealWorldWeb.Resolver.Content.resolve_favorite_count/3
+      resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_count/3)
     end
 
     field :created_at, :date_time do
@@ -30,5 +31,13 @@ defmodule RealWorldWeb.Schema.Content do
     field :edges, list_of(:article_edge)
     field :page_info, :page_info
     field :total_count, :integer
+  end
+
+  object :content_mutations do
+    field :favorite_article, :id do
+      middleware(RealWorldWeb.Middleware.Authorize)
+      arg(:slug, :string)
+      resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_article/3)
+    end
   end
 end

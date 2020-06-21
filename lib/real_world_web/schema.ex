@@ -43,6 +43,7 @@ defmodule RealWorldWeb.Schema do
 
   mutation do
     import_fields(:account_mutations)
+    import_fields(:content_mutations)
   end
 
   scalar :date_time do

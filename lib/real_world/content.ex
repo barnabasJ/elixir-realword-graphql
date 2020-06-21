@@ -9,8 +9,21 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
+  def favorite_article(slug, user_id) do
+    IO.inspect [user_id: user_id]
+    with %{id: id} <- get_article_by_slug(slug),
+         {:ok, uuid} <- Ecto.UUID.dump(user_id),
+         {1, _} <- Repo.insert_all("favorites", [%{article_id: id, user_id: uuid}]) do
+      {:ok, id}
+    else
+      _ -> :error
+    end
+  end
+
   def get_favorite_count_for_article(article_id) do
-    Repo.one(from f in "favorites", where: f.article_id == ^article_id, select: count(f.article_id))
+    Repo.one(
+      from f in "favorites", where: f.article_id == ^article_id, select: count(f.article_id)
+    )
   end
 
   def list_tags(), do: Repo.all(from t in Tag, select: t.name)

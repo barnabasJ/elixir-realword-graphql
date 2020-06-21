@@ -18,4 +18,13 @@ defmodule RealWorldWeb.Resolver.Content do
   def resolve_tags(_, _, _) do
     {:ok, RealWorld.Content.list_tags()}
   end
+
+  def resolve_favorite_article(_, %{slug: slug}, %{
+        context: %{current_user: %RealWorld.Accounts.User{id: id}}
+      }) do
+    case RealWorld.Content.favorite_article(slug, id) do
+      {:ok, id} -> {:ok, id}
+      _ -> {:error, "unable to save favorite"}
+    end
+  end
 end
