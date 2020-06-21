@@ -10,7 +10,9 @@ defmodule RealWorldWeb.Schema.Content do
     field :tags, list_of(:string)
     field :updated_at, :date_time
     field :viewer_has_favorited, :integer
-    field :favorites_count, :integer
+    field :favorites_count, :integer do
+      resolve &RealWorldWeb.Resolver.Content.resolve_favorite_count/3
+    end
 
     field :created_at, :date_time do
       resolve(fn parent, _, _ ->

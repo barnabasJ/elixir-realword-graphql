@@ -11,6 +11,10 @@ defmodule RealWorldWeb.Resolver.Content do
     {:ok, RealWorld.Content.get_article_by_slug(slug)}
   end
 
+  def resolve_favorite_count(%{id: id}, _, _) do
+    {:ok, RealWorld.Content.get_favorite_count_for_article(id)}
+  end
+
   def resolve_tags(_, _, _) do
     {:ok, RealWorld.Content.list_tags()}
   end

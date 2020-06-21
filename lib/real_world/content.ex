@@ -9,6 +9,10 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
+  def get_favorite_count_for_article(article_id) do
+    Repo.one(from f in "favorites", where: f.article_id == ^article_id, select: count(f.article_id))
+  end
+
   def list_tags(), do: Repo.all(from t in Tag, select: t.name)
 
   def paginate_articles(cursor \\ nil, limit \\ 50)
