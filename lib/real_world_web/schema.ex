@@ -4,6 +4,17 @@ defmodule RealWorldWeb.Schema do
   import_types(__MODULE__.Content)
   import_types(__MODULE__.Accounts)
 
+
+  def middleware(middleware, _field, %{identifier: :mutation}) do
+    middleware ++ [RealWorldWeb.Middleware.ChangesetErrors]
+  end
+
+  def middleware(middleware, %{identifier: :me}, _object) do
+    middleware ++ [RealWorldWeb.Middleware.Authorize]
+  end
+
+  def middleware(middleware, _field, _object), do: middleware
+
   object :page_info do
     field :end_cursor, :string
     field :has_next_page, :boolean
@@ -17,7 +28,6 @@ defmodule RealWorldWeb.Schema do
 
   query do
     field :me, :me do
-      middleware(RealWorldWeb.Middleware.Authorize)
       resolve(fn _, _, _ -> {:ok, %{}} end)
     end
 
