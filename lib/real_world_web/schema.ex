@@ -57,6 +57,10 @@ defmodule RealWorldWeb.Schema do
       arg(:username, :string)
       resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
     end
+
+    field :tags, list_of(:string) do
+      resolve(&RealWorldWeb.Resolver.Content.resolve_tags/3)
+    end
   end
 
   scalar :date_time do
