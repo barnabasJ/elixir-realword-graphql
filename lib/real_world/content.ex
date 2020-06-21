@@ -20,6 +20,15 @@ defmodule RealWorld.Content do
     end
   end
 
+  def get_favorite_count_for_articles(_, article_ids) do
+    (from f in "favorites", 
+    where: f.article_id in ^Enum.uniq(article_ids), 
+    group_by: f.article_id,
+    select: {f.article_id, count(f.article_id)})
+    |> Repo.all
+    |> Map.new(fn x -> x end)
+  end
+
   def get_favorite_count_for_article(article_id) do
     Repo.one(
       from f in "favorites", where: f.article_id == ^article_id, select: count(f.article_id)

@@ -1,5 +1,6 @@
 defmodule RealWorldWeb.Resolver.Content do
-  import Absinthe.Resolution.Helpers, only: [async: 1]
+  import Absinthe.Resolution.Helpers, only: [batch: 3]
+
   def resolve_articles(_, %{cursor: cursor}, _) do
     {:ok, RealWorld.Content.paginate_articles(cursor)}
   end
@@ -13,12 +14,9 @@ defmodule RealWorldWeb.Resolver.Content do
   end
 
   def resolve_favorite_count(%{id: id}, _, _) do
-    async(
-      fn -> 
-        {:ok, RealWorld.Content.get_favorite_count_for_article(id)} 
-      end
-    )
-    |> IO.inspect
+    batch({RealWorld.Content, :get_favorite_count_for_articles}, id,
+      fn favCounts -> 
+        {:ok, Map.get(favCounts, id, 0)} end)
   end
 
   def resolve_tags(_, _, _) do
