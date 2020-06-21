@@ -5,15 +5,32 @@ defmodule RealWorldWeb.Schema do
   import_types(__MODULE__.Accounts)
 
 
-  def middleware(middleware, _field, %{identifier: :mutation}) do
+  def middleware(middleware, field, object) do
+    middleware
+    |> apply(:auth, field, object)
+    |> apply(:errors, field, object)
+    |> apply(:debug, field, object)
+  end
+
+  defp apply(middleware, :errors, _field, %{identifier: :mutation}) do
     middleware ++ [RealWorldWeb.Middleware.ChangesetErrors]
   end
 
-  def middleware(middleware, %{identifier: :me}, _object) do
+  defp apply(middleware, :auth, %{identifier: :me}, _object) do
     middleware ++ [RealWorldWeb.Middleware.Authorize]
   end
 
-  def middleware(middleware, _field, _object), do: middleware
+
+  defp apply(middleware, :debug, _field, _object) do
+    if System.get_env("DEBUG") do
+      [{RealWorldWeb.Middleware.Debug, :start}] ++ middleware
+    else 
+      middleware
+    end
+  end
+
+  defp apply(middleware, _, _, _), do: middleware
+
 
   object :page_info do
     field :end_cursor, :string

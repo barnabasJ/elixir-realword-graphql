@@ -1,4 +1,5 @@
 defmodule RealWorldWeb.Resolver.Content do
+  import Absinthe.Resolution.Helpers, only: [async: 1]
   def resolve_articles(_, %{cursor: cursor}, _) do
     {:ok, RealWorld.Content.paginate_articles(cursor)}
   end
@@ -12,7 +13,12 @@ defmodule RealWorldWeb.Resolver.Content do
   end
 
   def resolve_favorite_count(%{id: id}, _, _) do
-    {:ok, RealWorld.Content.get_favorite_count_for_article(id)}
+    async(
+      fn -> 
+        {:ok, RealWorld.Content.get_favorite_count_for_article(id)} 
+      end
+    )
+    |> IO.inspect
   end
 
   def resolve_tags(_, _, _) do
