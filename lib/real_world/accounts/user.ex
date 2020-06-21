@@ -19,5 +19,6 @@ defmodule RealWorld.Accounts.User do
     user
     |> cast(attrs, [:username, :bio, :image])
     |> validate_required([:username])
+    |> cast_assoc(:login, required: true)
   end
 end

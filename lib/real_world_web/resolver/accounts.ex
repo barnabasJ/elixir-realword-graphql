@@ -14,4 +14,14 @@ defmodule RealWorldWeb.Resolver.Accounts do
         {:error, "incorrect email or password"}
     end 
   end
+
+  def register(_, %{register_input: %{username: username, email: email, password: password}}, _) do
+    RealWorld.Accounts.create_user(%{
+      username: username,
+      login: %{
+        email: email,
+        password: password
+      }
+    })
+  end
 end
