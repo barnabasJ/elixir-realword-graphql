@@ -7,7 +7,7 @@ defmodule RealWorld.Accounts.User do
   schema "users" do
     field :bio, :string
     field :image, :string
-    field :name, :string
+    field :username, :string
 
     timestamps()
   end
@@ -15,7 +15,7 @@ defmodule RealWorld.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :bio, :image])
-    |> validate_required([:name])
+    |> cast(attrs, [:username, :bio, :image])
+    |> validate_required([:username])
   end
 end

@@ -21,8 +21,8 @@ defmodule RealWorld.Accounts do
     Repo.all(User)
   end
 
-  def get_user_by_name(username) do
-    q = from u in User, where: u.name == ^username
+  def get_user_by_username(username) do
+    q = from u in User, where: u.username == ^username
     Repo.one(q)
   end
 

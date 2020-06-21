@@ -36,7 +36,7 @@ defmodule RealWorldWeb.Schema do
   end
 
   object :profile do
-    field :name, :string
+    field :username, :string
     field :bio, :string
     field :image, :string
     field :viewerIsFollowing, :boolean
