@@ -3,6 +3,10 @@ defmodule RealWorldWeb.Resolver.Accounts do
     {:ok, RealWorld.Accounts.get_user_by_username(username)}
   end
 
+  def resolve_profile(_, _, %{context: %{current_user: %RealWorld.Accounts.User{username: username}}}) do
+    {:ok, RealWorld.Accounts.get_user_by_username(username)}
+  end
+  
   def login(_, %{email: email, password: password}, _) do
     case RealWorld.Accounts.authenticate(email, password) do
       {:ok, login} -> 

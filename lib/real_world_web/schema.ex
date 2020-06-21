@@ -9,7 +9,18 @@ defmodule RealWorldWeb.Schema do
     field :has_next_page, :boolean
   end
 
+  object :me do
+    field :profile, :profile do
+      resolve &RealWorldWeb.Resolver.Accounts.resolve_profile/3
+    end
+  end
+
   query do
+    field :me, :me do
+      middleware RealWorldWeb.Middleware.Authorize
+      resolve fn _, _, _ -> {:ok, %{}} end
+    end
+
     field :articles, :article_connection do
       arg(:cursor, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
@@ -28,11 +39,6 @@ defmodule RealWorldWeb.Schema do
     field :tags, list_of(:string) do
       resolve(&RealWorldWeb.Resolver.Content.resolve_tags/3)
     end
-  end
-
-  object :session do
-    field :token, :string
-    field :user, :profile
   end
 
   mutation do

@@ -8,6 +8,10 @@ defmodule RealWorldWeb.Schema.Accounts do
     field :viewerIsFollowing, :boolean
   end
 
+  object :session do
+    field :token, :string
+    field :user, :profile
+  end
 
   input_object :register_input do
     field :username, non_null(:string)
