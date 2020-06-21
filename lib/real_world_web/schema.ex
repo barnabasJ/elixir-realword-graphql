@@ -30,6 +30,19 @@ defmodule RealWorldWeb.Schema do
     end
   end
 
+  object :session do
+    field :token, :string
+    field :user, :profile
+  end
+
+  mutation do
+    field :login, :session do
+      arg :email, non_null(:string)
+      arg :password, non_null(:string)
+      resolve &RealWorldWeb.Resolver.Accounts.login/3
+    end
+  end
+
   scalar :date_time do
     parse(fn input ->
       case DateTime.from_iso8601(input.value) do

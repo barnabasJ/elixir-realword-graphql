@@ -209,7 +209,7 @@ defmodule RealWorld.Accounts do
 
     with %{password: digest} <- login,
          true <- Password.valid?(password, digest) do
-      {:ok, login}
+      {:ok, login |> Repo.preload(:user)}
     else
       _ -> :error
     end
