@@ -36,11 +36,7 @@ defmodule RealWorldWeb.Schema do
   end
 
   mutation do
-    field :login, :session do
-      arg :email, non_null(:string)
-      arg :password, non_null(:string)
-      resolve &RealWorldWeb.Resolver.Accounts.login/3
-    end
+    import_fields :account_mutations
   end
 
   scalar :date_time do
