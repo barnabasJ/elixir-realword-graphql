@@ -1,6 +1,7 @@
 defmodule RealWorld.Accounts.User do
   use RealWorld.Schema
   import Ecto.Changeset
+  alias RealWorld.Accounts
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
@@ -8,6 +9,7 @@ defmodule RealWorld.Accounts.User do
     field :bio, :string
     field :image, :string
     field :username, :string
+    has_one :login, Accounts.Login
 
     timestamps()
   end

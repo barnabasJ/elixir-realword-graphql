@@ -45,7 +45,9 @@ defmodule RealWorld.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:absinthe, "~> 1.5"},
       {:absinthe_plug, "~> 1.5"},
-      {:credo, "~> 1.2", only: [:dev], runtime: false}
+      {:credo, "~> 1.2", only: [:dev], runtime: false},
+      {:comeonin_ecto_password, "~> 3.0"},
+      {:pbkdf2_elixir, "~> 1.2"}
     ]
   end
 
