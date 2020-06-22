@@ -1,13 +1,19 @@
 defmodule RealWorldWeb.Resolver.Content do
   import Absinthe.Resolution.Helpers, only: [batch: 3, on_load: 2]
 
-  def resolve_articles(_, %{cursor: cursor}, _) do
-    {:ok, RealWorld.Content.paginate_articles(cursor)}
-  end
 
-  def resolve_articles(_, _, _) do
-    {:ok, RealWorld.Content.paginate_articles()}
-  end
+
+  def resolve_articles(_, %{cursor: cursor, page_size: page_size, filter: filter}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, filter)}
+
+  def resolve_articles(_, %{cursor: cursor, page_size: page_size}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, nil)}
+
+  def resolve_articles(_, %{page_size: page_size, filter: filter}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(nil, page_size, filter)}
+
+  def resolve_articles(_, %{page_size: page_size}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(nil, page_size, nil)}
 
   def resolve_article(_, %{slug: slug}, _) do
     {:ok, RealWorld.Content.get_article_by_slug(slug)}

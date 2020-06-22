@@ -42,6 +42,24 @@ defmodule RealWorldWeb.Schema do
 
   defp apply(middleware, _, _, _), do: middleware
 
+  query do
+    import_fields(:content_queries)
+
+    field :me, :me do
+      resolve(fn _, _, _ -> {:ok, %{}} end)
+    end
+
+    field :profile, :profile do
+      arg(:username, :string)
+      resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
+    end
+  end
+
+  mutation do
+    import_fields(:account_mutations)
+    import_fields(:content_mutations)
+  end
+
   object :page_info do
     field :end_cursor, :string
     field :has_next_page, :boolean
@@ -51,36 +69,6 @@ defmodule RealWorldWeb.Schema do
     field :profile, :profile do
       resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
     end
-  end
-
-  query do
-    field :me, :me do
-      resolve(fn _, _, _ -> {:ok, %{}} end)
-    end
-
-    field :articles, :article_connection do
-      arg(:cursor, :string)
-      resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
-    end
-
-    field :article, :article do
-      arg(:slug, non_null(:string))
-      resolve(&RealWorldWeb.Resolver.Content.resolve_article/3)
-    end
-
-    field :profile, :profile do
-      arg(:username, :string)
-      resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
-    end
-
-    field :tags, list_of(:string) do
-      resolve(&RealWorldWeb.Resolver.Content.resolve_tags/3)
-    end
-  end
-
-  mutation do
-    import_fields(:account_mutations)
-    import_fields(:content_mutations)
   end
 
   scalar :date_time do

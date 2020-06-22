@@ -1,6 +1,29 @@
 defmodule RealWorldWeb.Schema.Content do
   use Absinthe.Schema.Notation
 
+  object :content_queries do
+    field :articles, :article_connection do
+      arg(:filter, :article_filter)
+      arg(:cursor, :string)
+      arg(:page_size, :integer, default_value: 50)
+      resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
+    end
+
+    field :tags, list_of(:string) do
+      resolve(&RealWorldWeb.Resolver.Content.resolve_tags/3)
+    end
+
+    field :article, :article do
+      arg(:slug, non_null(:string))
+      resolve(&RealWorldWeb.Resolver.Content.resolve_article/3)
+    end
+  end
+
+  input_object :article_filter do
+    field :tag, :string
+    field :author, :string
+  end
+
   object :article do
     field :id, :id
     field :slug, :string

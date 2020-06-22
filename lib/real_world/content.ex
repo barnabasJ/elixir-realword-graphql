@@ -62,18 +62,23 @@ defmodule RealWorld.Content do
 
   def list_tags(), do: Repo.all(from t in Tag, select: t.name)
 
-  def paginate_articles(cursor \\ nil, limit \\ 50)
-  def paginate_articles(nil, limit), do: _paginate_articles(0, limit)
-  def paginate_articles(cursor, limit), do: _paginate_articles(decode_term(cursor), limit)
+  def paginate_articles(nil, nil, nil), do: _paginate_articles(0, 50, %{})
+  def paginate_articles(nil, nil, filter), do: _paginate_articles(0, 50, filter)
+  def paginate_articles(nil, limit, nil), do: _paginate_articles(0, limit, %{})
+  def paginate_articles(nil, limit, filter), do: _paginate_articles(0, limit, filter)
+  def paginate_articles(cursor, limit, nil), do: _paginate_articles(decode_term(cursor), limit, %{})
+  def paginate_articles(cursor, limit, filter), do: _paginate_articles(decode_term(cursor), limit, filter)
 
-  defp _paginate_articles(offset, limit) do
-    count_query = from a in Article, select: count(a.id)
+  defp _paginate_articles(offset, limit, filter) do
+    count_query = (from a in Article, select: count(a.id))
+                  |> filter_article_query(filter)
 
     article_query =
       Article
       |> order_by({:desc, :updated_at})
       |> limit(^limit + 1)
       |> offset(^offset)
+      |> filter_article_query(filter)
 
     articles = Repo.all(article_query)
     count = Repo.one(count_query)
@@ -93,6 +98,25 @@ defmodule RealWorld.Content do
       page_info: page_info,
       total_count: count
     }
+  end
+
+  defp filter_article_query(query, filter) do
+    filter
+    |> IO.inspect
+    |> Enum.reduce(query, fn
+      {:tag, tag}, query ->
+        from q in query,
+        join: at in "article_tags",
+        on: at.article_id == q.id,
+        join: t in Tag,
+        on: at.tag_id == t.id,
+        where: t.name == ^tag
+      {:author, author_name}, query ->
+        from q in query,
+        join: u in RealWorld.Accounts.User,
+        on: q.author_id == u.id,
+        where: u.username == ^author_name
+    end)
   end
 
   defp encode_term(term), do: term |> :erlang.term_to_binary() |> Base.encode64()
