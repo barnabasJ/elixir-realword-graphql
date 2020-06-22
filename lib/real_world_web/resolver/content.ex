@@ -23,7 +23,8 @@ defmodule RealWorldWeb.Resolver.Content do
         context: %{current_user: %RealWorld.Accounts.User{id: user_id}}
       }) do
     batch(
-      {RealWorldWeb.Resolver.Content, :get_views_for_article}, user_id,
+      {RealWorldWeb.Resolver.Content, :get_views_for_article},
+      user_id,
       fn favs ->
         {:ok, Map.get(favs, article_id, false)}
       end
