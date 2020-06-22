@@ -19,6 +19,12 @@ defmodule RealWorldWeb.Resolver.Content do
     {:ok, RealWorld.Content.get_article_by_slug(slug)}
   end
 
+  def resolve_article_for_author(%{username: username}, %{page_size: page_size}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(nil, page_size, %{author: username})}
+
+  def resolve_article_for_author(%{username: username}, %{cursor: cursor, page_size: page_size}, _),
+    do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, %{author: username})}
+
   def resolve_tags(article, _, %{context: %{loader: loader}}) do
     loader
     |> Dataloader.load(RealWorld.Content, :tags, article)

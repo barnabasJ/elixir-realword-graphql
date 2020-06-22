@@ -5,7 +5,7 @@ defmodule RealWorldWeb.Schema.Content do
     field :articles, :article_connection do
       arg(:filter, :article_filter)
       arg(:cursor, :string)
-      arg(:page_size, :integer, default_value: 50)
+      arg(:page_size, :integer, default_value: 20)
       resolve(&RealWorldWeb.Resolver.Content.resolve_articles/3)
     end
 

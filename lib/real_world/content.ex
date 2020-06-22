@@ -76,7 +76,7 @@ defmodule RealWorld.Content do
     article_query =
       Article
       |> order_by({:desc, :updated_at})
-      |> limit(^limit + 1)
+      |> limit(^limit)
       |> offset(^offset)
       |> filter_article_query(filter)
 
@@ -102,7 +102,6 @@ defmodule RealWorld.Content do
 
   defp filter_article_query(query, filter) do
     filter
-    |> IO.inspect
     |> Enum.reduce(query, fn
       {:tag, tag}, query ->
         from q in query,

@@ -6,6 +6,11 @@ defmodule RealWorldWeb.Schema.Accounts do
     field :bio, :string
     field :image, :string
     field :viewerIsFollowing, :boolean
+    field :article, :article_connection do
+      arg :cursor, :string
+      arg :page_size, :integer, default_value: 20
+      resolve &RealWorldWeb.Resolver.Content.resolve_article_for_author/3
+    end
   end
 
   object :session do
