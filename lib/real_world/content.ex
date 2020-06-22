@@ -9,12 +9,17 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
+  def data(), do: Dataloader.Ecto.new(Repo, query: &query/2)
+
+  def query(queryable, _), do: queryable
+
   def get_author_for_articles(article_ids) do
-    query = from u in RealWorld.Accounts.User, 
-      join: a in Article,
-      on: a.author_id == u.id,
-      where: a.id in ^article_ids,
-      select: {a.id, u}
+    query =
+      from u in RealWorld.Accounts.User,
+        join: a in Article,
+        on: a.author_id == u.id,
+        where: a.id in ^article_ids,
+        select: {a.id, u}
 
     Repo.all(query)
   end
@@ -64,11 +69,8 @@ defmodule RealWorld.Content do
   defp _paginate_articles(offset, limit) do
     count_query = from a in Article, select: count(a.id)
 
-    tags_query = from t in Tag, select: t.name
-
     article_query =
       Article
-      |> preload(tags: ^tags_query)
       |> order_by({:desc, :updated_at})
       |> limit(^limit + 1)
       |> offset(^offset)

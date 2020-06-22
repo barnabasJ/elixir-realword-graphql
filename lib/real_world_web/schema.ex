@@ -4,6 +4,19 @@ defmodule RealWorldWeb.Schema do
   import_types(__MODULE__.Content)
   import_types(__MODULE__.Accounts)
 
+  def dataloader() do
+    Dataloader.new()
+    |> Dataloader.add_source(RealWorld.Content, RealWorld.Content.data())
+  end
+
+  def context(ctx) do
+    Map.put(ctx, :loader, dataloader())
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader | Absinthe.Plugin.defaults()]
+  end
+
   def middleware(middleware, field, object) do
     middleware
     |> apply(:auth, field, object)

@@ -7,8 +7,9 @@ defmodule RealWorldWeb.Schema.Content do
     field :title, :string
     field :description, :string
     field :body, :string
-    field :tags, list_of(:string)
     field :updated_at, :date_time
+
+    field :tags, list_of(:string), resolve: &RealWorldWeb.Resolver.Content.resolve_tags/3
 
     field :viewer_has_favorited, :boolean do
       resolve(&RealWorldWeb.Resolver.Content.resolve_viewer_has_favorited/3)
