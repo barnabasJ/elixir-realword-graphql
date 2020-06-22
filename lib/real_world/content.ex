@@ -9,8 +9,17 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
+  def get_favorite_articles_for_user(user_id) do
+    case Ecto.UUID.dump(user_id) do
+      {:ok, uuid} ->
+        Repo.all(from f in "favorites", where: f.user_id == ^uuid, select: f.article_id)
+
+      _ ->
+        :error
+    end
+  end
+
   def favorite_article(slug, user_id) do
-    IO.inspect [user_id: user_id]
     with %{id: id} <- get_article_by_slug(slug),
          {:ok, uuid} <- Ecto.UUID.dump(user_id),
          {1, _} <- Repo.insert_all("favorites", [%{article_id: id, user_id: uuid}]) do
@@ -21,11 +30,12 @@ defmodule RealWorld.Content do
   end
 
   def get_favorite_count_for_articles(_, article_ids) do
-    (from f in "favorites", 
-    where: f.article_id in ^Enum.uniq(article_ids), 
-    group_by: f.article_id,
-    select: {f.article_id, count(f.article_id)})
-    |> Repo.all
+    from(f in "favorites",
+      where: f.article_id in ^Enum.uniq(article_ids),
+      group_by: f.article_id,
+      select: {f.article_id, count(f.article_id)}
+    )
+    |> Repo.all()
     |> Map.new(fn x -> x end)
   end
 

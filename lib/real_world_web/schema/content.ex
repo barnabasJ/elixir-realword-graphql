@@ -9,7 +9,10 @@ defmodule RealWorldWeb.Schema.Content do
     field :body, :string
     field :tags, list_of(:string)
     field :updated_at, :date_time
-    field :viewer_has_favorited, :integer
+
+    field :viewer_has_favorited, :boolean do
+      resolve(&RealWorldWeb.Resolver.Content.resolve_viewer_has_favorited/3)
+    end
 
     field :favorites_count, :integer do
       resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_count/3)

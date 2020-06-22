@@ -4,7 +4,6 @@ defmodule RealWorldWeb.Schema do
   import_types(__MODULE__.Content)
   import_types(__MODULE__.Accounts)
 
-
   def middleware(middleware, field, object) do
     middleware
     |> apply(:auth, field, object)
@@ -20,17 +19,15 @@ defmodule RealWorldWeb.Schema do
     middleware ++ [RealWorldWeb.Middleware.Authorize]
   end
 
-
   defp apply(middleware, :debug, _field, _object) do
     if System.get_env("DEBUG") do
       [{RealWorldWeb.Middleware.Debug, :start}] ++ middleware
-    else 
+    else
       middleware
     end
   end
 
   defp apply(middleware, _, _, _), do: middleware
-
 
   object :page_info do
     field :end_cursor, :string
