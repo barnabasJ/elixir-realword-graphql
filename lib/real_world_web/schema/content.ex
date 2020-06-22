@@ -23,6 +23,10 @@ defmodule RealWorldWeb.Schema.Content do
         {:ok, Map.get(parent, :inserted_at)}
       end)
     end
+
+    field :author, :profile do
+      resolve(&RealWorldWeb.Resolver.Content.resolve_author/3)
+    end
   end
 
   object :article_edge do

@@ -13,6 +13,18 @@ defmodule RealWorldWeb.Resolver.Content do
     {:ok, RealWorld.Content.get_article_by_slug(slug)}
   end
 
+  def resolve_author(%{id: article_id}, _, _) do
+    batch({__MODULE__, :get_author_for_articles}, article_id, fn authors ->
+      {:ok, Map.get(authors, article_id, nil)}
+    end)
+  end
+
+  def get_author_for_articles(_, article_ids) do
+    article_ids
+    |> RealWorld.Content.get_author_for_articles
+    |> Enum.reduce(%{}, fn {article_id, author}, acc -> Map.put(acc, article_id, author) end)
+  end
+
   def resolve_favorite_count(%{id: id}, _, _) do
     batch({RealWorld.Content, :get_favorite_count_for_articles}, id, fn favCounts ->
       {:ok, Map.get(favCounts, id, 0)}

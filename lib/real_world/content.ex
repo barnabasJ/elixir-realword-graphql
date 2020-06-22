@@ -9,6 +9,16 @@ defmodule RealWorld.Content do
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
 
+  def get_author_for_articles(article_ids) do
+    query = from u in RealWorld.Accounts.User, 
+      join: a in Article,
+      on: a.author_id == u.id,
+      where: a.id in ^article_ids,
+      select: {a.id, u}
+
+    Repo.all(query)
+  end
+
   def get_favorite_articles_for_user(user_id) do
     case Ecto.UUID.dump(user_id) do
       {:ok, uuid} ->
