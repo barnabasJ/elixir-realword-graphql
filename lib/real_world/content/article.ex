@@ -1,8 +1,6 @@
 defmodule RealWorld.Content.Article do
   use RealWorld.Schema
   import Ecto.Changeset
-  import Ecto.Query
-  alias RealWorld.Repo
 
   schema "articles" do
     field :body, :string

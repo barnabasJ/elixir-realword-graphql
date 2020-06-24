@@ -8,10 +8,27 @@ defmodule RealWorld.Content do
 
   alias RealWorld.Content.Article
   alias RealWorld.Content.Tag
+  alias RealWorld.Content.Comment
+
+  # Dataloader
 
   def data(), do: Dataloader.Ecto.new(Repo, query: &query/2)
 
   def query(queryable, _), do: queryable
+
+  # Comments
+
+  def create_comment(slug, body, user_id) do
+    with %Article{id: article_id} <- Repo.get_by(Article, slug: slug) do
+      %Comment{}
+      |> Comment.changeset(%{article_id: article_id, body: body, author_id: user_id})
+      |> Repo.insert()
+    else
+      _ -> {:error, "No article with this slug exists"}
+    end
+  end
+
+  # Article
 
   def get_author_for_articles(article_ids) do
     query =
@@ -66,12 +83,17 @@ defmodule RealWorld.Content do
   def paginate_articles(nil, nil, filter), do: _paginate_articles(0, 50, filter)
   def paginate_articles(nil, limit, nil), do: _paginate_articles(0, limit, %{})
   def paginate_articles(nil, limit, filter), do: _paginate_articles(0, limit, filter)
-  def paginate_articles(cursor, limit, nil), do: _paginate_articles(decode_term(cursor), limit, %{})
-  def paginate_articles(cursor, limit, filter), do: _paginate_articles(decode_term(cursor), limit, filter)
+
+  def paginate_articles(cursor, limit, nil),
+    do: _paginate_articles(decode_term(cursor), limit, %{})
+
+  def paginate_articles(cursor, limit, filter),
+    do: _paginate_articles(decode_term(cursor), limit, filter)
 
   defp _paginate_articles(offset, limit, filter) do
-    count_query = (from a in Article, select: count(a.id))
-                  |> filter_article_query(filter)
+    count_query =
+      from(a in Article, select: count(a.id))
+      |> filter_article_query(filter)
 
     article_query =
       Article
@@ -105,16 +127,17 @@ defmodule RealWorld.Content do
     |> Enum.reduce(query, fn
       {:tag, tag}, query ->
         from q in query,
-        join: at in "article_tags",
-        on: at.article_id == q.id,
-        join: t in Tag,
-        on: at.tag_id == t.id,
-        where: t.name == ^tag
+          join: at in "article_tags",
+          on: at.article_id == q.id,
+          join: t in Tag,
+          on: at.tag_id == t.id,
+          where: t.name == ^tag
+
       {:author, author_name}, query ->
         from q in query,
-        join: u in RealWorld.Accounts.User,
-        on: q.author_id == u.id,
-        where: u.username == ^author_name
+          join: u in RealWorld.Accounts.User,
+          on: q.author_id == u.id,
+          where: u.username == ^author_name
     end)
   end
 

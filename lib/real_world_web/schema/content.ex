@@ -64,11 +64,22 @@ defmodule RealWorldWeb.Schema.Content do
     field :total_count, :integer
   end
 
+  input_object :comment_input do
+    field :slug, non_null(:string)
+    field :body, non_null(:string)
+  end
+
   object :content_mutations do
     field :favorite_article, :id do
       middleware(RealWorldWeb.Middleware.Authorize)
       arg(:slug, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_article/3)
+    end
+
+    field :comment_article, :id do
+      middleware(RealWorldWeb.Middleware.Authorize)
+      arg(:comment_input, :comment_input)
+      resolve(&RealWorldWeb.Resolver.Content.resolve_comment_article/3)
     end
   end
 end

@@ -1,8 +1,6 @@
 defmodule RealWorldWeb.Resolver.Content do
   import Absinthe.Resolution.Helpers, only: [batch: 3, on_load: 2]
 
-
-
   def resolve_articles(_, %{cursor: cursor, page_size: page_size, filter: filter}, _),
     do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, filter)}
 
@@ -22,8 +20,12 @@ defmodule RealWorldWeb.Resolver.Content do
   def resolve_article_for_author(%{username: username}, %{page_size: page_size}, _),
     do: {:ok, RealWorld.Content.paginate_articles(nil, page_size, %{author: username})}
 
-  def resolve_article_for_author(%{username: username}, %{cursor: cursor, page_size: page_size}, _),
-    do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, %{author: username})}
+  def resolve_article_for_author(
+        %{username: username},
+        %{cursor: cursor, page_size: page_size},
+        _
+      ),
+      do: {:ok, RealWorld.Content.paginate_articles(cursor, page_size, %{author: username})}
 
   def resolve_tags(article, _, %{context: %{loader: loader}}) do
     loader
@@ -79,12 +81,24 @@ defmodule RealWorldWeb.Resolver.Content do
     |> Enum.reduce(%{}, fn article_id, acc -> Map.put(acc, article_id, true) end)
   end
 
+  ################ Mutations #####################################
+
   def resolve_favorite_article(_, %{slug: slug}, %{
         context: %{current_user: %RealWorld.Accounts.User{id: id}}
       }) do
     case RealWorld.Content.favorite_article(slug, id) do
       {:ok, id} -> {:ok, id}
       _ -> {:error, "unable to save favorite"}
+    end
+  end
+
+  def resolve_comment_article(_, %{comment_input: %{slug: slug, body: body}}, %{
+        context: %{current_user: %{id: id}}
+      }) do
+    case RealWorld.Content.create_comment(slug, body, id) do
+      {:ok, %RealWorld.Content.Comment{id: id}} -> {:ok, id}
+      _ -> 
+          {:error, "Unable to create comment"}
     end
   end
 end
