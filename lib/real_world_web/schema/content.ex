@@ -64,6 +64,12 @@ defmodule RealWorldWeb.Schema.Content do
     field :total_count, :integer
   end
 
+  object :comment do
+    field :body, :string
+  end
+
+  ####### Mutations
+
   input_object :comment_input do
     field :slug, non_null(:string)
     field :body, non_null(:string)
@@ -80,6 +86,22 @@ defmodule RealWorldWeb.Schema.Content do
       middleware(RealWorldWeb.Middleware.Authorize)
       arg(:comment_input, :comment_input)
       resolve(&RealWorldWeb.Resolver.Content.resolve_comment_article/3)
+    end
+  end
+
+  ######## Subscriptions
+  
+  object :content_subscriptions do
+    field :new_comment, :comment do
+      
+      config fn _args, _info -> 
+        {:ok, topic: "*"}
+      end
+
+      resolve fn root, _, _ ->
+        IO.inspect root
+        {:ok, root}
+      end
     end
   end
 end

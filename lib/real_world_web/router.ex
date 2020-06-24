@@ -9,7 +9,9 @@ defmodule RealWorldWeb.Router do
   scope "/api" do
     pipe_through :api
 
-    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: RealWorldWeb.Schema
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: RealWorldWeb.Schema,
+      socket: RealWorldWeb.UserSocket
 
     forward "/", Absinthe.Plug, schema: RealWorldWeb.Schema
   end

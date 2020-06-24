@@ -96,9 +96,12 @@ defmodule RealWorldWeb.Resolver.Content do
         context: %{current_user: %{id: id}}
       }) do
     case RealWorld.Content.create_comment(slug, body, id) do
-      {:ok, %RealWorld.Content.Comment{id: id}} -> {:ok, id}
-      _ -> 
-          {:error, "Unable to create comment"}
+      {:ok, %RealWorld.Content.Comment{id: id} = comment} ->
+        Absinthe.Subscription.publish(RealWorldWeb.Endpoint, comment, new_comment: "*")
+        {:ok, id}
+
+      _ ->
+        {:error, "Unable to create comment"}
     end
   end
 end

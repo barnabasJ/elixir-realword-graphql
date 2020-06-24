@@ -1,5 +1,6 @@
 defmodule RealWorldWeb.UserSocket do
   use Phoenix.Socket
+  use Absinthe.Phoenix.Socket, schema: RealWorldWeb.Schema
 
   ## Channels
   # channel "room:*", RealWorldWeb.RoomChannel

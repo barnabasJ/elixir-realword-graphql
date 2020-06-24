@@ -45,6 +45,7 @@ defmodule RealWorld.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:absinthe, "~> 1.5"},
       {:absinthe_plug, "~> 1.5"},
+      {:absinthe_phoenix, "~> 2.0"},
       {:dataloader, "~> 1.0"},
       {:credo, "~> 1.2", only: [:dev], runtime: false},
       {:comeonin_ecto_password, "~> 3.0"},

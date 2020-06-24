@@ -71,6 +71,10 @@ defmodule RealWorldWeb.Schema do
     end
   end
 
+  subscription do
+    import_fields(:content_subscriptions)
+  end
+
   scalar :date_time do
     parse(fn input ->
       case DateTime.from_iso8601(input.value) do
