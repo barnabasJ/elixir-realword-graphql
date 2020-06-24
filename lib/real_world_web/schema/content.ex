@@ -82,7 +82,7 @@ defmodule RealWorldWeb.Schema.Content do
       resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_article/3)
     end
 
-    field :comment_article, :id do
+    field :comment_article, :comment do
       middleware(RealWorldWeb.Middleware.Authorize)
       arg(:comment_input, :comment_input)
       resolve(&RealWorldWeb.Resolver.Content.resolve_comment_article/3)
@@ -90,18 +90,24 @@ defmodule RealWorldWeb.Schema.Content do
   end
 
   ######## Subscriptions
-  
+
   object :content_subscriptions do
     field :new_comment, :comment do
-      
-      config fn _args, _info -> 
-        {:ok, topic: "*"}
-      end
+      arg :article_id, non_null(:id)
 
-      resolve fn root, _, _ ->
-        IO.inspect root
+      config(fn args, _info ->
+        {:ok, topic: args.article_id}
+      end)
+
+      trigger([:comment_article],
+        topic: fn %{article_id: article_id} = i -> 
+            [article_id]
+        end
+      )
+
+      resolve(fn root, _, _ ->
         {:ok, root}
-      end
+      end)
     end
   end
 end
