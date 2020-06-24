@@ -83,6 +83,11 @@ defmodule RealWorldWeb.Schema.Content do
     field :body, non_null(:string)
   end
 
+  object :article_result do
+    field :article, :article
+    field :errors, list_of(:input_error)
+  end
+
   object :content_mutations do
     field :create_article, :article do
       arg(:article_input, :article_input)

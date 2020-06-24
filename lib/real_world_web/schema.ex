@@ -28,6 +28,10 @@ defmodule RealWorldWeb.Schema do
     middleware ++ [RealWorldWeb.Middleware.ChangesetErrors]
   end
 
+  defp apply(middleware, :errors, %{identifier: :create_article}, _object) do
+    middleware ++ [RealWorldWeb.Middleware.ChangesetErrors]
+  end
+
   defp apply(middleware, :auth, %{identifier: :me}, _object) do
     middleware ++ [RealWorldWeb.Middleware.Authorize]
   end
@@ -41,6 +45,17 @@ defmodule RealWorldWeb.Schema do
   end
 
   defp apply(middleware, _, _, _), do: middleware
+
+  object :page_info do
+    field :end_cursor, :string
+    field :has_next_page, :boolean
+  end
+
+  object :me do
+    field :profile, :profile do
+      resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
+    end
+  end
 
   query do
     import_fields(:content_queries)
@@ -56,6 +71,12 @@ defmodule RealWorldWeb.Schema do
     end
   end
 
+  @desc "An error encountered trying to persist input"
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
+  end
+
   mutation do
     field :content, :content_mutations do
       middleware(RealWorldWeb.Middleware.Authorize)
@@ -63,17 +84,6 @@ defmodule RealWorldWeb.Schema do
     end
 
     import_fields(:account_mutations)
-  end
-
-  object :page_info do
-    field :end_cursor, :string
-    field :has_next_page, :boolean
-  end
-
-  object :me do
-    field :profile, :profile do
-      resolve(&RealWorldWeb.Resolver.Accounts.resolve_profile/3)
-    end
   end
 
   subscription do
