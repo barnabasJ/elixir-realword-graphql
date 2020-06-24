@@ -70,20 +70,31 @@ defmodule RealWorldWeb.Schema.Content do
 
   ####### Mutations
 
+  input_object :article_input do
+    field :slug, non_null(:string)
+    field :title, non_null(:string)
+    field :description, non_null(:string)
+    field :body, non_null(:string)
+    field :tags, non_null(list_of(non_null(:string)))
+  end
+
   input_object :comment_input do
     field :slug, non_null(:string)
     field :body, non_null(:string)
   end
 
   object :content_mutations do
+    field :create_article, :article do
+      arg(:article_input, :article_input)
+      resolve(&RealWorldWeb.Resolver.Content.resolve_create_article/3)
+    end
+
     field :favorite_article, :id do
-      middleware(RealWorldWeb.Middleware.Authorize)
       arg(:slug, :string)
       resolve(&RealWorldWeb.Resolver.Content.resolve_favorite_article/3)
     end
 
     field :comment_article, :comment do
-      middleware(RealWorldWeb.Middleware.Authorize)
       arg(:comment_input, :comment_input)
       resolve(&RealWorldWeb.Resolver.Content.resolve_comment_article/3)
     end
@@ -93,15 +104,19 @@ defmodule RealWorldWeb.Schema.Content do
 
   object :content_subscriptions do
     field :new_comment, :comment do
-      arg :article_id, non_null(:id)
+      arg(:article_id, non_null(:id))
 
       config(fn args, _info ->
         {:ok, topic: args.article_id}
       end)
 
-      trigger([:comment_article],
-        topic: fn %{article_id: article_id} = i -> 
+      trigger(:comment_article,
+        topic: fn
+          %{article_id: article_id} ->
             [article_id]
+
+          _ ->
+            []
         end
       )
 

@@ -83,6 +83,10 @@ defmodule RealWorldWeb.Resolver.Content do
 
   ################ Mutations #####################################
 
+  def resolve_create_article(_, %{article_input: attrs}, %{context: %{current_user: %{id: id}}}) do
+    RealWorld.Content.create_article(Map.put(attrs, :author_id, id))
+  end
+
   def resolve_favorite_article(_, %{slug: slug}, %{
         context: %{current_user: %RealWorld.Accounts.User{id: id}}
       }) do

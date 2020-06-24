@@ -46,6 +46,7 @@ defmodule RealWorldWeb.Schema do
     import_fields(:content_queries)
 
     field :me, :me do
+      middleware(RealWorldWeb.Middleware.Authorize)
       resolve(fn _, _, _ -> {:ok, %{}} end)
     end
 
@@ -56,8 +57,12 @@ defmodule RealWorldWeb.Schema do
   end
 
   mutation do
+    field :content, :content_mutations do
+      middleware(RealWorldWeb.Middleware.Authorize)
+      resolve(fn _, _, _ -> {:ok, %{}} end)
+    end
+
     import_fields(:account_mutations)
-    import_fields(:content_mutations)
   end
 
   object :page_info do
