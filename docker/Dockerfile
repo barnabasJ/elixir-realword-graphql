@@ -46,4 +46,4 @@ COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/real_world ./
 
 ENV HOME=/app
 
-CMD ["bin/my_app", "start"]
+CMD ["bin/real_world", "start"]
