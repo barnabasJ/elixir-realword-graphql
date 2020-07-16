@@ -26,7 +26,7 @@ secret_key_base =
 config :real_world, RealWorldWeb.Endpoint,
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
-    transport_options: [socket_opts: [:inet6]]
+    transport_options: [socket_opts: [:inet4]]
   ],
   secret_key_base: secret_key_base
 
@@ -35,7 +35,7 @@ config :real_world, RealWorldWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :real_world, RealWorldWeb.Endpoint, server: true
+config :real_world, RealWorldWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
